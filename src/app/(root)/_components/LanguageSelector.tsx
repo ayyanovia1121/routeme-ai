@@ -8,6 +8,7 @@ import { ChevronDownIcon, Lock, Sparkles } from "lucide-react";
 import useMounted from "@/hooks/useMounted";
 
 function LanguageSelector({ hasAccess }: { hasAccess: boolean }) {
+
   const [isOpen, setIsOpen] = useState(false);
 
   const mounted = useMounted();
@@ -32,15 +33,15 @@ function LanguageSelector({ hasAccess }: { hasAccess: boolean }) {
         setIsOpen(false);
       }
     };
-    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   // function to handle language selection
   const handleLanguageSelect = (languageId: string) => {
-    if (!hasAccess && languageId === "javascript") return
+    if (!hasAccess && languageId !== "javascript") return
 
     setLanguage(languageId);
     setIsOpen(false);
