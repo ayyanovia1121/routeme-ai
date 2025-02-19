@@ -107,7 +107,29 @@ export const useCodeEditorStore = create<CodeEditorState>((set, get) => {
           });
           return;
         }
-      } catch (error) {}
+
+        if (data.run && data.run.code !== 0) {
+          const error = data.run.output || data.run.stderr;
+          set({ error, executionResult: { code, output: "", error } });
+          return;
+        }
+
+        // when execution is successful
+        const output = data.run.output;
+        set({
+          output: output.trim(),
+          error: null,
+          executionResult: { code, output: output.trim(), error: null },
+        });
+      } catch (error) {
+        console.error("Error running code:", error);
+        set({
+          error: "Error running code",
+          executionResult: { code, output: "", error: "Error running code" },
+        });
+      }finally {
+        set({ isRunning: false });
+      }
     },
   };
 });
