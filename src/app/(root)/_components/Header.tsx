@@ -19,6 +19,8 @@ async function Header() {
   // show currently logged in user from clerk
   const user = await currentUser();
 
+  // console.log({ user });
+
   // show currently logged in user from convex
   const convexUser = await convex.query(api.users.getUser, {
     userId: user?.id || "",
@@ -79,26 +81,29 @@ async function Header() {
           {/* Theme and Language Selector */}
           <div className="flex items-center gap-3">
             <ThemeSelector />
-            <LanguageSelector hasAccess={Boolean(convexUser?.isPro)}/>
+            <LanguageSelector hasAccess={Boolean(convexUser?.isPro)} />
           </div>
 
           {/* User Status */}
-          <Link
-            href="/pricing"
-            className="flex items-center gap-2 px-4 py-1.5 rounded-lg border border-amber-500/20 hover:border-amber-500/40 bg-gradient-to-r from-amber-500/10 
+          {convexUser?.isPro && (
+            <Link
+              href="/pricing"
+              className="flex items-center gap-2 px-4 py-1.5 rounded-lg border border-amber-500/20 hover:border-amber-500/40 bg-gradient-to-r from-amber-500/10 
                 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 
                 transition-all duration-300"
-          >
-            <Sparkles className="w-4 h-4 text-amber-400 hover:text-amber-300" />
-            <span className="text-sm font-medium text-amber-400/90 hover:text-amber-300">
-              Pro
-            </span>
-          </Link>
+            >
+              <Sparkles className="w-4 h-4 text-amber-400 hover:text-amber-300" />
+              <span className="text-sm font-medium text-amber-400/90 hover:text-amber-300">
+                Pro
+              </span>
+            </Link>
+          )}
 
+          {/* WIP Later */}
           {/* Sign In */}
-          <SignedIn>
+          {/* <SignedIn> */}
             <RunButton />
-          </SignedIn>
+          {/* </SignedIn> */}
 
           {/* Profile */}
           <div className="pl-3 border-l border-gray-800">
