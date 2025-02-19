@@ -28,7 +28,7 @@ export default defineSchema({
     code: v.string(),
     userName: v.string(),
   }).index("by_user_id", ["userId"]),
-  
+
   snippetComments: defineTable({
     snippetId: v.id("snippets"),
     userId: v.string(),
@@ -39,5 +39,8 @@ export default defineSchema({
   stars: defineTable({
     userId: v.id("users"),
     snippetId: v.id("snippets"),
-  }).index("by_user_id_and_snippet_id", ["userId", "snippetId"]),
+  })
+    .index("by_user_id", ["userId"])
+    .index("by_snippet_id", ["snippetId"])
+    .index("by_user_id_and_snippet_id", ["userId", "snippetId"]),
 });
