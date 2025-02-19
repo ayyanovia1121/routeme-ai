@@ -1,30 +1,45 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { useCodeEditorStore } from "@/store/useCodeEditorStore";
+import { getExecutionResult, useCodeEditorStore } from "@/store/useCodeEditorStore";
 import { motion } from "framer-motion";
 import { Loader2, Play } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 
 function RunButton() {
-  const { user } = useUser();
-  const { language, isRunning, runCode, executionResult } =
+  const { runCode, language, isRunning } =
     useCodeEditorStore();
+  const saveExecution = useMutation(api.codeExecutions.saveExecution);
+  const { isLoaded, user } = useUser();
 
-  // const saveCodeExecution = useMutation(api.codeExecutions.saveCodeExecution);
+  const result = getExecutionResult();
 
-  const handleRunCode = async () => {
+  if (!isLoaded) {
+    return <p className="text-white">Loading...</p>;
+  }
+
+  const hanleRunCode = async () => {
+    if (!user) {
+      console.log("❌ User not logged in. Cannot run code.");
+      return;
+    }
     await runCode();
 
-    if(user && executionResult) {
-
+    if (user && result) {
+      await saveExecution({
+        language,
+        code: result.code,
+        output: result.output || undefined,
+        error: result.error || undefined,
+      });
+    } else {
+      console.log("❌ User not logged in. Cannot save execution.");
     }
   };
-
   return (
-    <motion.div
-      onClick={handleRunCode}
+    <motion.button
+      onClick={hanleRunCode}
       disabled={isRunning}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -36,6 +51,7 @@ function RunButton() {
     >
       {/* bg wit gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl opacity-100 transition-opacity group-hover:opacity-90" />
+
       <div className="relative flex items-center gap-2.5">
         {isRunning ? (
           <>
@@ -58,7 +74,7 @@ function RunButton() {
           </>
         )}
       </div>
-    </motion.div>
+    </motion.button>
   );
 }
 

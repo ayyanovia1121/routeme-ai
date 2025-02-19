@@ -108,6 +108,14 @@ export const useCodeEditorStore = create<CodeEditorState>((set, get) => {
           return;
         }
 
+        // handle compilation errors
+        if(data.compile && data.compile.code !== 0) {
+          const error = data.compile.output || data.compile.stderr;
+          set({ error, executionResult: { code, output: "", error } });
+          return;
+        }
+
+        // handle runtime errors
         if (data.run && data.run.code !== 0) {
           const error = data.run.output || data.run.stderr;
           set({ error, executionResult: { code, output: "", error } });
@@ -133,3 +141,6 @@ export const useCodeEditorStore = create<CodeEditorState>((set, get) => {
     },
   };
 });
+
+export const getExecutionResult = () =>
+  useCodeEditorStore.getState().executionResult;

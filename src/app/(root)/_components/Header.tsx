@@ -23,6 +23,7 @@ async function Header() {
   const convexUser = await convex.query(api.users.getUser, {
     userId: user?.id || "",
   });
+  
 
   // console.log({ convexUser });
 
