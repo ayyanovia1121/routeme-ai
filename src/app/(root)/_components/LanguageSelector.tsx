@@ -49,6 +49,8 @@ function LanguageSelector({ hasAccess }: { hasAccess: boolean }) {
 
   // if the component is not mounted, return null
   if (!mounted) return null;
+
+
   return (
     <div className="relative" ref={dropDownRef}>
       <motion.button
@@ -56,7 +58,7 @@ function LanguageSelector({ hasAccess }: { hasAccess: boolean }) {
         whileTap={{ scale: 0.98 }}
         onClick={() => setIsOpen(!isOpen)}
         className={`group relative flex items-center gap-3 px-4 py-2.5 bg-[#1e1e2e]/80 rounded-lg transition-all duration-200 border border-gray-800/50 hover:border-gray-700 
-        ${!hasAccess && language === "javascript" ? "opacity-50 cursor-not-allowed" : ""}`}
+        ${!hasAccess && language !== "javascript" ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         {/* Decoration */}
         <div
@@ -82,6 +84,8 @@ function LanguageSelector({ hasAccess }: { hasAccess: boolean }) {
             ${isOpen ? "rotate-180" : ""}`}
         />
       </motion.button>
+
+      {/* Language Selector Dropdown */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
