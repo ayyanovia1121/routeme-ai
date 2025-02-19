@@ -17,6 +17,7 @@ import { motion } from "framer-motion";
 import { useClerk } from "@clerk/nextjs";
 import { EditorPanelSkeleton } from "./EditorPanelSkeleton";
 import useMounted from "@/hooks/useMounted";
+import ShareSnippetDialog from "./ShareSnippetDialog";
 
 const EditorPanel = () => {
   const clerk = useClerk();
@@ -128,6 +129,7 @@ const EditorPanel = () => {
               <ShareIcon className="size-4 text-white" />
               <span className="text-sm font-medium text-white ">Share</span>
             </motion.button>
+
           </div>
         </div>
 
@@ -168,7 +170,9 @@ const EditorPanel = () => {
           {!clerk.loaded && <EditorPanelSkeleton />}
         </div>
       </div>
-      {/* {isShareDialogOpen && <ShareSnippetDialog onClose={() => setIsShareDialogOpen(false)} />} */}
+
+      {/* Action for share Button */}
+      {isShareDialogOpen && <ShareSnippetDialog  onClose={() => setIsShareDialogOpen(false)} />}
     </div>
   );
 };
