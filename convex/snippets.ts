@@ -160,6 +160,22 @@ export const getSnippets = query({
   },
 });
 
+// Get Snippet Single data
+export const getSnippetById = query({
+  args: {
+    snippetId: v.id("snippets"),
+  },
+  handler: async(ctx, args) => {
+    try {
+      const snippet = await ctx.db.get(args.snippetId);
+      if (!snippet) throw new Error(" 🔴 Snippet not found");
+    } catch (error) {
+     console.error("❌ Error fetching data by id:", error);
+     throw new Error("Database query failed");
+    }
+  }
+});
+
 // Snipped Stars
 export const isSnippetStarred = query({
   args: {

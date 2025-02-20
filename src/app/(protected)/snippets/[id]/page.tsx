@@ -1,11 +1,8 @@
-import React from 'react'
 
-type Props = {}
-
-const page = (props: Props) => {
+function SnippetDetailPage () {
   return (
-    <div>page</div>
+    <div>SnippetDetailPage</div>
   )
 }
 
-export default page
+export default SnippetDetailPage
