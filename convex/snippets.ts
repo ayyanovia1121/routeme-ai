@@ -180,6 +180,30 @@ export const addComment = mutation({
   }
 });
 
+// Delete Comment from database
+export const deleteComment = mutation({
+  args: { commentId: v.id("snippetComments") },
+  handler: async (ctx, args) => {
+    try {
+      const userIdentity = await ctx.auth.getUserIdentity();
+      if (!userIdentity) throw new Error("🔴 User not authenticated");
+
+      const comment = await ctx.db.get(args.commentId);
+      if (!comment) throw new Error("🔴 Comment not found");
+
+      // check if the user is the owner of the comment
+      if (comment.userId !== userIdentity.subject) {
+        throw new Error("🔴 Not authorized to delete this comment");
+      }
+
+      await ctx.db.delete(args.commentId);
+    } catch (error) {
+      console.error("❌ Error deleting comment:", error);
+      throw new Error("Database operation failed");
+    }
+  }
+})
+
 // Get Snippets data
 export const getSnippets = query({
   handler: async (ctx) => {
