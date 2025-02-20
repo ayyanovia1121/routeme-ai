@@ -11,7 +11,7 @@ import { Clock, Code, MessageSquare, User } from "lucide-react";
 import { Editor } from "@monaco-editor/react";
 import { defineMonacoThemes, Language_Config } from "@/app/(root)/_constants";
 import CopyButton from "./_components/CopyButton";
-import CommentsSection from "./_components/CommentsSection";
+import CommentGroup from "./_components/CommentGroup";
 
 function SnippetDetailPage() {
   // to
@@ -100,7 +100,7 @@ function SnippetDetailPage() {
             />
           </div>
 
-          <CommentsSection snippetId={snippet._id} />
+          <CommentGroup snippetId={snippet._id} />
         </div>
       </main>
     </div>
