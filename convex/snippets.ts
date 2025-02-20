@@ -147,6 +147,39 @@ export const starSnippet = mutation({
   },
 });
 
+// Add Comment to database
+export const addComment = mutation({
+  args: {
+    snippetId: v.id("snippets"),
+    content: v.string(),
+  },
+  handler: async (ctx, args) => {
+    try {
+      const userIdentity = await ctx.auth.getUserIdentity();
+      if (!userIdentity) throw new Error("🔴 User not authenticated");
+
+      // check user
+      const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("userId"), userIdentity.subject))
+      .first();
+
+      if(!user) throw new Error("🔴 User not found");
+
+      return await ctx.db.insert("snippetComments", {
+        snippetId: args.snippetId,
+        userId: userIdentity.subject,
+        userName: user.name,
+        content: args.content,
+      });
+
+    } catch (error) {
+      console.error("❌ Error adding comment:", error);
+      throw new Error("Database operation failed");
+    }
+  }
+});
+
 // Get Snippets data
 export const getSnippets = query({
   handler: async (ctx) => {
